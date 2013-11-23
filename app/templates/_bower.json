@@ -1,0 +1,10 @@
+{
+  "name": "<%= _.slugify(siteName) %>",
+  "version": "0.0.0",
+  "devDependencies": {
+      "bazalt": "*",
+      <% if (bootstrap) { %>"bootstrap": "~3.0.0",<% } %>
+      "requirejs": "*"
+  }
+}
+

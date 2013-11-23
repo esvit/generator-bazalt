@@ -1,0 +1,41 @@
+{
+  "name": "generator-bazalt",
+  "version": "0.1.0",
+  "description": "Yeoman generator for Bazalt CMS",
+  "keywords": [
+    "yeoman-generator", "bazalt", "cms"
+  ],
+  "homepage": "https://github.com/esvit/generator-bazalt",
+  "bugs": "https://github.com/esvit/generator-bazalt/issues",
+  "author": {
+    "name": "Vitalii Savchuk",
+    "email": "esvit666@gmail.com",
+    "url": "https://github.com/esvit"
+  },
+  "main": "app/index.js",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/esvit/generator-bazalt.git"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "dependencies": {
+    "yeoman-generator": "~0.13.0"
+  },
+  "devDependencies": {
+    "mocha": "~1.12.0"
+  },
+  "peerDependencies": {
+    "yo": ">=1.0.0"
+  },
+  "engines": {
+    "node": ">=0.8.0",
+    "npm": ">=1.2.10"
+  },
+  "licenses": [
+    {
+      "type": "MIT"
+    }
+  ]
+}
