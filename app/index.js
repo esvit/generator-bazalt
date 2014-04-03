@@ -79,7 +79,7 @@ BazaltGenerator.prototype.askForBootstrap = function askForBootstrap() {
     }], function (props) {
         this.bootstrap = props.bootstrap;
 
-        if (this.boostrap) {
+        if (this.bootstrap) {
             this.write('assets/less/theme.less', '@import "../../bower_components/bootstrap/less/bootstrap";');
         }
 
