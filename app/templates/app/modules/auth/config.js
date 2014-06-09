@@ -1,5 +1,5 @@
 define([
-    'base/module'
+    'modules/auth/module'
 ], function (module) {
     'use strict';
 

@@ -5,7 +5,7 @@ define([
 ], function (angular) {
     'use strict';
 
-    return angular.module('base.home', [
+    return angular.module('module.auth.login', [
         'bz'
     ]);
 });

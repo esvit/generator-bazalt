@@ -1,9 +1,13 @@
 define([
-    'angular', 'bz'
+    'angular',
+
+    'base/config/config',
+    'base/home/config'
 ], function (angular) {
     'use strict';
 
-    return angular.module('base.config', [
-        'bz'
+    return angular.module('base', [
+        'base.config',
+        'base.home'
     ]);
 });

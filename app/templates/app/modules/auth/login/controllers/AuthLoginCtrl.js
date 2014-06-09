@@ -1,9 +1,9 @@
 define([
-    'app'
-], function (app) {
+    'modules/auth/login/module'
+], function (module) {
     'use strict';
 
-    app.controller('loginCtrl', ['$scope', 'bzUser', function($scope, bzUser) {
+    module.controller('AuthLoginCtrl', ['$scope', 'bzUser', function($scope, bzUser) {
         $scope.login = function(user) {
             bzUser.$login(user);
         }

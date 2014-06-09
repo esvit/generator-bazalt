@@ -35,7 +35,7 @@
 
         <div class="col col-lg-3 ng-cloak">
             {{'Test'|translate}}
-            <form ng-if="$user.is_guest" ng-controller="loginCtrl" ng-submit="login(user)" ng-init="user = { 'email': 'admin', 'password': '1' }">
+            <form ng-if="$user.is_guest" ng-controller="AuthLoginCtrl" ng-submit="login(user)" ng-init="user = { 'email': 'admin', 'password': '1' }">
                 <div class="form-group">
                     <label for="email">Login / Email:</label>
                     <input id="email" class="form-control" type="text" ng-model="user.email"/>
@@ -58,6 +58,6 @@
 </div>
 
 <script src="/bazalt.js"></script>
-<script src="/bower_components/requirejs/require.js" data-main="config"></script>
+<script src="/bower_components/requirejs/require.js" data-main="app/requireConfig"></script>
 </body>
 </html>

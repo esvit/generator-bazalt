@@ -1,7 +1,7 @@
 define([
-    'base/home/module',
+    'modules/auth/login/module',
 
-    'base/home/controllers/BaseHomeCtrl'
+    'modules/auth/login/controllers/AuthLoginCtrl'
 ], function (module) {
     'use strict';
 

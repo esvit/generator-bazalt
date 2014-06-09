@@ -6,13 +6,13 @@ define([
     'use strict';
 
     module.config(['$routeSegmentProvider', 'bzConfigProvider', 'bzUserProvider',
-        function($routeSegmentProvider, bzConfigProvider, bzUser) {
+        function($routeSegmentProvider, bzConfigProvider, bzUserProvider) {
             $routeSegmentProvider
                 .when('/', 'home')
                 .segment('home', {
-                    templateUrl: '/themes/default/views/home.html',
+                    templateUrl: bzConfigProvider.templateUrl('/home.html'),
                     resolve: {
-                        permissions: bzUser.access()
+                        permissions: bzUserProvider.access()
                     },
                     controller: 'BaseHomeCtrl',
                     resolveFailed: bzConfigProvider.errorResolver()

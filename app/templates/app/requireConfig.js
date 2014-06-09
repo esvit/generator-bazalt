@@ -104,4 +104,4 @@ requirejs.config({
     urlArgs: 'v=1.1'
 });
 
-require(['main']);
+require(['_bootstrap']);

@@ -1,21 +1,84 @@
-var mountFolder = function (connect, dir) {
-    return connect.static(require('path').resolve(dir));
-};
+var fs = require('fs'),
+    url = require('url'),
+    urlRewrite = function (rootDir, indexFile) {
+        indexFile = indexFile || "index.html";
+        return function (req, res, next) {
+            var path = url.parse(req.url).pathname;
+            return fs.readFile('./' + rootDir + path, function (err, buf) {
+                if (!err) {
+                    return next();
+                }
+                if (path.substring(path.length - 4) == 'html') { // if html file not found
+                    res.writeHead(404);
+                    return res.end('Not found');
+                }
+                return fs.readFile('./' + rootDir + '/' + indexFile, function (error, buffer) {
+                    var resp;
+                    if (error) {
+                        return next(error);
+                    }
+                    resp = {
+                        headers: {
+                            'Content-Type': 'text/html',
+                            'Content-Length': buffer.length
+                        },
+                        body: buffer
+                    };
+                    res.writeHead(200, resp.headers);
+                    return res.end(resp.body);
+                });
+            });
+        };
+    };
+
 module.exports = function (grunt) {
+    require('load-grunt-tasks')(grunt);
+
+    grunt.registerTask('serve', [
+        'copy:assets', 'connect:dev', 'watch'
+    ]);
+    grunt.registerTask('serve-build', [
+        'copy:assets', 'connect:build', 'watch'
+    ]);
+
+    grunt.registerTask('build', [
+        // CSS
+        'less:assets',
+        'copy:assets',
+
+        // HTML
+        'html2js',
+        'htmlmin',
+        'replace',
+
+        // JS
+        'requirejs',
+        'uglify:requirejs',
+        'uglify:app',
+    ]);
+    grunt.registerTask('default', [
+        'build', 'serve-build'
+    ]);
+
     grunt.initConfig({
+        pkg: grunt.file.readJSON('package.json'),
+        build_dir: './build',
+        app_build_file: '_bootstrap.js',
+        banner: 'Developed by Vitalii Savchuk (esvit666@gmail.com)', // write your copyright
+
         copy: {
-            theme: {
+            assets: {
                 files: [
                     {
                         expand: true,
                         src: ['assets/**', '!assets/less/**', 'favicon.png'],
-                        dest: 'build/'
+                        dest: '<%= build_dir %>'
                     }
                 ]
             }
         },
         less: {
-            theme: {
+            assets: {
                 src: 'assets/less/theme.less',
                 dest: 'assets/css/theme.css'
             }
@@ -27,22 +90,22 @@ module.exports = function (grunt) {
                     optimize: 'none',
                     preserveLicenseComments: false,
                     useStrict: true,
-                    wrap: {
-                        start: "(function() {",
-                        end: "require(['main']) }());"
-                    },
-                    mainConfigFile: 'main.js',
-                    name: 'main',
-                    include: ['requirejs'],
+                    mainConfigFile: 'app/requireConfig.js',
+                    name: '_bootstrap',
+                    include: [],
                     exclude: ['./views.js'],
-                    out: 'build/js/main.min.js'
+                    out: '<%= build_dir %>/<%= app_build_file %>'
                 }
             }
         },
         uglify: {
-            frontend: {
-                src: ['build/js/main.min.js'],
-                dest: 'build/js/main.min.js'
+            requirejs: {
+                src: ['bower_components/requirejs/require.js'],
+                dest: '<%= build_dir %>/r.js'
+            },
+            app: {
+                src: ['<%= build_dir %>/<%= app_build_file %>'],
+                dest: '<%= build_dir %>/<%= app_build_file %>'
             },
             options: {
                 compress: false,
@@ -96,9 +159,23 @@ module.exports = function (grunt) {
             },
             dev: {
                 options: {
-                    middleware: function (connect) {
+                    middleware: function(connect, options) {
                         return [
-                            mountFolder(connect, '.')
+                            urlRewrite('.'),
+                            connect["static"](options.base),
+                            connect.directory(options.base)
+                        ];
+                    }
+                }
+            },
+            build: {
+                options: {
+                    base: './build',
+                    middleware: function(connect, options) {
+                        return [
+                            urlRewrite('./build'),
+                            connect["static"](options.base),
+                            connect.directory(options.base)
                         ];
                     }
                 }
@@ -106,16 +183,12 @@ module.exports = function (grunt) {
         },
         replace: {
             admin: {
-                src: 'build/index.html',
+                src: '<%= build_dir %>/index.html',
                 overwrite: true,
                 replacements: [
                     {
-                        from: /<script src="(.*)\/require.js"><\/script>/gm,
-                        to: ''
-                    },
-                    {
-                        from: '<script src="/main.js"></script>',
-                        to: '<script src="/js/main.min.js"></script>'
+                        from: /<script src="(.*)\/require.js"(.*)><\/script>/gm,
+                        to: '<script src="/r.js" data-main="_bootstrap"></script>'
                     },
                     {
                         from: '<script src="/bazalt.js"></script>',
@@ -131,22 +204,30 @@ module.exports = function (grunt) {
                 dest: 'locale',
                 safeMode: false
             }
+        },
+        html2js: {
+            options: {
+                base: '.',
+                module: 'views',
+                singleModule: true,
+                rename: function (moduleName) {
+                    return '/' + moduleName;
+                },
+                htmlmin: {
+                    collapseBooleanAttributes:      true,
+                    collapseWhitespace:             true,
+                    removeAttributeQuotes:          true,
+                    removeComments:                 true, // Only if you don't use comment directives!
+                    removeEmptyAttributes:          true,
+                    removeRedundantAttributes:      true,
+                    removeScriptTypeAttributes:     true,
+                    removeStyleLinkTypeAttributes:  true
+                }
+            },
+            app: {
+                src: ['views/**/*.html'],
+                dest: '<%= build_dir %>/views.js'
+            }
         }
     });
-    grunt.loadNpmTasks('grunt-contrib-htmlmin');
-    grunt.loadNpmTasks('grunt-contrib-copy');
-    grunt.loadNpmTasks('grunt-contrib-uglify');
-    grunt.loadNpmTasks('grunt-contrib-requirejs');
-    grunt.loadNpmTasks('grunt-contrib-less');
-    grunt.loadNpmTasks('grunt-contrib-watch');
-    grunt.loadNpmTasks('grunt-contrib-connect');
-    grunt.loadNpmTasks('grunt-text-replace');
-    grunt.loadNpmTasks('grunt-angular-translate');
-
-    grunt.registerTask('serve', [
-        'copy:theme', 'connect:dev', 'watch'
-    ]);
-    return grunt.registerTask('default', [
-        'ngTemplateCache', 'less:theme', 'copy:theme', 'requirejs', 'uglify', 'htmlmin', 'replace'
-    ]);
 };

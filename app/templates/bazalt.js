@@ -1,4 +1,4 @@
 CKEDITOR_BASEPATH = '/assets/ckeditor/';
 bazalt = {
-    api: 'http://hellv.in/api/rest.php'
+    api: 'http://dev-els.ua2.biz/api/rest.php'
 }

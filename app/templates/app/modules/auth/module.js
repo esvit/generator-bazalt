@@ -1,13 +1,11 @@
 define([
     'angular',
 
-    'base/config/config',
-    'base/home/config'
+    'modules/auth/login/config'
 ], function (angular) {
     'use strict';
 
-    return angular.module('base', [
-        'base.config',
-        'base.home'
+    return angular.module('module.auth', [
+        'module.auth.login'
     ]);
 });

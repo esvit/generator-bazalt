@@ -50,21 +50,35 @@ BazaltGenerator.prototype.app = function app() {
 
     this.copy('Gruntfile.js', 'Gruntfile.js');
     this.copy('bazalt.js', 'bazalt.js');
-    this.copy('config.js', 'config.js');
     this.template('_package.json', 'package.json');
 
     this.copy('index.html', 'index.html');
 
+    this.copy('app/requireConfig.js', 'app/requireConfig.js');
     this.copy('app/app.js', 'app/app.js');
-    this.copy('app/main.js', 'app/main.js');
-    this.copy('app/routes.js', 'app/routes.js');
-    this.copy('app/controllers.js', 'app/controllers.js');
-    this.copy('app/controllers/homeCtrl.js', 'app/controllers/homeCtrl.js');
-    this.copy('app/controllers/loginCtrl.js', 'app/controllers/loginCtrl.js');
+    this.copy('app/_bootstrap.js', 'app/_bootstrap.js');
+    this.copy('app/views.js', 'app/views.js');
+
+    this.copy('app/base/config.js', 'app/base/config.js');
+    this.copy('app/base/module.js', 'app/base/module.js');
+
+    this.copy('app/base/config/config.js', 'app/base/config/config.js');
+    this.copy('app/base/config/module.js', 'app/base/config/module.js');
+
+    this.copy('app/base/home/config.js', 'app/base/home/config.js');
+    this.copy('app/base/home/module.js', 'app/base/home/module.js');
+    this.copy('app/base/home/controllers/BaseHomeCtrl.js', 'app/base/home/controllers/BaseHomeCtrl.js');
+
+    this.copy('app/modules/auth/config.js', 'app/modules/auth/config.js');
+    this.copy('app/modules/auth/module.js', 'app/modules/auth/module.js');
+
+    this.copy('app/modules/auth/login/config.js', 'app/modules/auth/login/config.js');
+    this.copy('app/modules/auth/login/module.js', 'app/modules/auth/login/module.js');
+    this.copy('app/modules/auth/login/controllers/AuthLoginCtrl.js', 'app/modules/auth/login/controllers/AuthLoginCtrl.js');
 
     this.copy('assets/less/theme.less', 'assets/less/theme.less');
 
-    this.copy('views/index.html', 'views/index.html');
+    this.copy('views/home.html', 'views/home.html');
 };
 
 
