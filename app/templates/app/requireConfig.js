@@ -9,7 +9,7 @@ requirejs.config({
         'bz.seo': '../bower_components/bz.seo/build/seo',
 
         // jquery
-        'jquery': '../bower_components/jquery/jquery',
+        'jquery': '../bower_components/jquery/dist/jquery',
         'jquery-ui': '../bower_components/jquery-ui/ui',
         'jquery.atwho': '../bower_components/jquery.atwho/src/jquery.atwho',
         'caretjs': '../bower_components/Caret.js/src/jquery.caret',

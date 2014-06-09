@@ -1,6 +1,6 @@
 /* jshint browser:true, jquery:true */
 define('main', [
-    'angular', 'app', 'controllers', 'routes'
+    'angular', 'app', 'controllers', 'routes', 'views'
 ], function(angular, app) {
     'use strict';
 
