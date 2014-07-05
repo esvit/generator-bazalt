@@ -77,6 +77,7 @@ BazaltGenerator.prototype.app = function app() {
     this.copy('app/modules/auth/login/controllers/AuthLoginCtrl.js', 'app/modules/auth/login/controllers/AuthLoginCtrl.js');
 
     this.copy('assets/less/theme.less', 'assets/less/theme.less');
+    this.copy('public.key', 'public.key');
 
     this.copy('views/home.html', 'views/home.html');
 };

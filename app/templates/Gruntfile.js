@@ -34,6 +34,9 @@ var fs = require('fs'),
 module.exports = function (grunt) {
     require('load-grunt-tasks')(grunt);
 
+    grunt.registerTask('deploy', [
+        'build', 'compress', 'bazalt_upload', 'bump'
+    ]);
     grunt.registerTask('serve', [
         'copy:assets', 'connect:dev', 'watch'
     ]);
@@ -60,11 +63,14 @@ module.exports = function (grunt) {
         'build', 'serve-build'
     ]);
 
+    require('./bazalt');
     grunt.initConfig({
+        bazalt: bazalt,
         pkg: grunt.file.readJSON('package.json'),
         build_dir: './build',
+        releases_dir: './releases',
         app_build_file: '_bootstrap.js',
-        banner: 'Developed by Vitalii Savchuk (esvit666@gmail.com)', // write your copyright
+        banner: 'Developed by Vitalii Savchuk (esvit666@gmail.com) v<%= pkg.version %>', // write your copyright
 
         copy: {
             assets: {
@@ -227,6 +233,38 @@ module.exports = function (grunt) {
             app: {
                 src: ['views/**/*.html'],
                 dest: '<%= build_dir %>/views.js'
+            }
+        },
+        compress: {
+            main: {
+                options: {
+                    archive: '<%= releases_dir %>/v<%= pkg.version %>.zip'
+                },
+                files: [{
+                    expand: true,
+                    cwd: '<%= build_dir %>/',
+                    src: [
+                        '**/*'
+                    ]
+                }]
+            }
+        },
+        bazalt_upload: {
+            deploy: {
+                options: {
+                    version: '<%= pkg.version %>',
+                    url: '<%= bazalt.api %>/deploy'
+                },
+                src: '<%= releases_dir %>/v<%= pkg.version %>.zip'
+            }
+        },
+        bump: {
+            options: {
+                files: ['bazalt.js', 'package.json', 'bower.json'],
+                updateConfigs: [],
+                commit: false,
+                createTag: false,
+                push: false
             }
         }
     });
