@@ -1,6 +1,6 @@
 {
   "name": "<%= _.slugify(siteName) %>",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "devDependencies": {
       "bazalt": "*",
       <% if (bootstrap) { %>"bootstrap": "~3.0.0",<% } %>
